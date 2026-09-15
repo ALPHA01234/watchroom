@@ -1,9 +1,11 @@
 {
-  "name": "sites-worker-esm-starter",
+  "name": "watchroom-lite",
   "private": true,
   "type": "module",
   "scripts": {
+    "start": "node server.js",
     "build": "bash scripts/build.sh",
     "validate": "node scripts/validate-artifact.mjs"
-  }
+  },
+  "dependencies": { "ws": "^8.18.0" }
 }
