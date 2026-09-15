@@ -2,11 +2,7 @@ import http from 'node:http';
 import fs from 'node:fs';
 import { WebSocketServer } from 'ws';
 
-const source=fs.readFileSync(new URL('./worker/index.js',import.meta.url),'utf8');
-const start=source.indexOf('const page=`')+'const page=`'.length;
-const end=source.indexOf('`;',start);
-if(start<12||end<0) throw new Error('Could not read page template');
-const page=source.slice(start,end);
+const page=fs.readFileSync(new URL('./public/index.html',import.meta.url),'utf8');
 const rooms=new Map();
 const relay=(room,payload,except)=>{const peers=rooms.get(room);if(!peers)return;const data=JSON.stringify(payload);for(const [id,ws] of peers)if(id!==except&&ws.readyState===1&&(!payload.to||payload.to===id))ws.send(data)};
 const server=http.createServer((req,res)=>{if(req.url?.split('?')[0]!=='/'){res.writeHead(404);return res.end('Not found')}res.writeHead(200,{'content-type':'text/html; charset=utf-8','cache-control':'no-store','x-content-type-options':'nosniff'});res.end(page)});
